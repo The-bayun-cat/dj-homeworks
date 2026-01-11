@@ -2,13 +2,106 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Рецепты</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe_name|capfirst }} - Рецепт</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .recipe-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .ingredients-list {
+            list-style: none;
+            padding: 0;
+        }
+        .ingredient-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ingredient-item:nth-child(even) {
+            background: #f8f8f8;
+        }
+        .ingredient-name {
+            font-weight: bold;
+        }
+        .ingredient-amount {
+            color: #4CAF50;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #008CBA;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .servings-form {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 5px;
+        }
+        input[type="number"] {
+            padding: 5px;
+            width: 100px;
+        }
+        input[type="submit"] {
+            padding: 5px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-{% for ingredient, amount in recipe.items %}
-    <p>{{ ingredient }}: {{ amount }}</p>
-{% empty %}
-    <p>Такого рецепта не знаю :(</p>
-{% endfor %}
+    <div class="container">
+        <h1>{{ recipe_name|capfirst }}</h1>
+
+        <div class="recipe-info">
+            <p>Рецепт на {{ servings }} порцию(и/ей)</p>
+        </div>
+
+        <div class="servings-form">
+            <form method="get">
+                <label for="servings">Изменить количество порций:</label>
+                <input type="number" name="servings" id="servings" value="{{ servings }}" min="1">
+                <input type="submit" value="Пересчитать">
+            </form>
+        </div>
+
+        <h2>Ингредиенты:</h2>
+        <ul class="ingredients-list">
+            {% for ingredient, amount in recipe.items %}
+                <li class="ingredient-item">
+                    <span class="ingredient-name">{{ ingredient }}</span>
+                    <span class="ingredient-amount">{{ amount }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <a href="/" class="back-link">← Вернуться ко всем рецептам</a>
+    </div>
 </body>
 </html>

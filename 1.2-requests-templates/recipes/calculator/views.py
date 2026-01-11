@@ -1,5 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render
-
+from django.conf import settings
 DATA = {
     'omlet': {
         'яйца, шт': 2,
@@ -20,6 +21,47 @@ DATA = {
 }
 
 # Напишите ваш обработчик. Используйте DATA как источник данных
+
+def recipes_view(request, dish):
+    """Отображает рецепт для указанного блюда"""
+
+    # Получаем количество порций из GET-параметра
+    servings = request.GET.get('servings', 1)
+
+    try:
+        servings = int(servings)
+    except ValueError:
+        servings = 1
+
+    # Проверяем, есть ли такое блюдо в базе данных
+    if dish not in DATA:
+        return HttpResponse(f'Рецепт для блюда "{dish}" не найден', status=404)
+
+    # Получаем оригинальный рецепт
+    recipe = DATA[dish]
+
+    # Масштабируем ингредиенты в зависимости от количества порций
+    scaled_recipe = {}
+    for ingredient, amount in recipe.items():
+        scaled_recipe[ingredient] = amount * servings
+
+    # Подготавливаем контекст для шаблона
+    context = {
+        'recipe_name': dish,
+        'recipe': scaled_recipe,
+        'servings': servings,
+    }
+
+    return render(request, 'calculator/index.html', context)
+
+
+def home_view(request):
+    """Главная страница со списком доступных рецептов"""
+    context = {
+        'recipes': list(DATA.keys())
+    }
+    return render(request, 'calculator/home.html', context)
+
 # Результат - render(request, 'calculator/index.html', context)
 # В качестве контекста должен быть передан словарь с рецептом:
 # context = {

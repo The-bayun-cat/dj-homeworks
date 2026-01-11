@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кулинарная книга</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .recipes-list {
+            list-style: none;
+            padding: 0;
+        }
+        .recipe-item {
+            margin: 15px 0;
+        }
+        .recipe-link {
+            display: block;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .recipe-link:hover {
+            background: #45a049;
+        }
+        .servings-form {
+            margin: 20px 0;
+            text-align: center;
+        }
+        input[type="number"] {
+            padding: 5px;
+            width: 100px;
+        }
+        input[type="submit"] {
+            padding: 5px 15px;
+            background: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать в кулинарную книгу!</h1>
+        <p>Выберите рецепт:</p>
+
+        <ul class="recipes-list">
+            {% for recipe in recipes %}
+                <li class="recipe-item">
+                    <a href="/{{ recipe }}/" class="recipe-link">{{ recipe|capfirst }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="servings-form">
+            <p>Или укажите количество порций для конкретного рецепта:</p>
+            <form action="/omlet/" method="get">
+                <label for="servings">Количество порций:</label>
+                <input type="number" name="servings" id="servings" value="1" min="1">
+                <input type="submit" value="Применить ко всем рецептам">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
