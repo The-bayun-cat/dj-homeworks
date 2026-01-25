@@ -1,0 +1,73 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Книги за {{ current_date|date:"Y-m-d" }}</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Книги за {{ current_date|date:"Y-m-d" }}</h1>-->
+
+<!--    <div>-->
+<!--        {% if prev_date %}-->
+<!--            <a href="{% url 'books:books_by_date' prev_date|date:'Y-m-d' %}">-->
+<!--                ← {{ prev_date|date:"Y-m-d" }}-->
+<!--            </a>-->
+<!--        {% else %}-->
+<!--            <span>← Нет предыдущей даты</span>-->
+<!--        {% endif %}-->
+
+<!--        |-->
+
+<!--        <a href="{% url 'books:books_view' %}">Все книги</a>-->
+
+<!--        |-->
+
+<!--        {% if next_date %}-->
+<!--            <a href="{% url 'books:books_by_date' next_date|date:'Y-m-d' %}">-->
+<!--                {{ next_date|date:"Y-m-d" }} →-->
+<!--            </a>-->
+<!--        {% else %}-->
+<!--            <span>Нет следующей даты →</span>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+
+<!--    {% if books %}-->
+<!--        <ul>-->
+<!--        {% for book in books %}-->
+<!--            <li>-->
+<!--                <strong>{{ book.title }}</strong> - {{ book.author }}-->
+<!--                ({{ book.pub_date|date:"Y-m-d" }})-->
+<!--            </li>-->
+<!--        {% endfor %}-->
+<!--        </ul>-->
+<!--    {% else %}-->
+<!--        <p>Нет книг за эту дату.</p>-->
+<!--    {% endif %}-->
+<!--</body>-->
+<!--</html>-->
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Каталог книг{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1><a href="/books">Каталог</a></h1>
+        </div>
+        <div class="row">
+        {% for book in books %}
+            <div class="book col-md-4">
+                <h2>{{ book.name }}</h2>
+                <p>Автор: {{ book.author }}</p>
+                <p>Дата публикации: {{ book.pub_date }}</p>
+            </div>
+        {% endfor %}
+            </div>
+        </div>
+    </div>
+
+   <a href = '{% url 'books' %}{{ previous_book }}'> <buttom> {{ previous_book }} </buttom></a>
+   <a href = '{% url 'books' %}{{ next_book }}'> <buttom> {{ next_book }} </buttom></a>
+
+
+{% endblock %}

@@ -7,17 +7,72 @@
         <div class="header">
             <h1><a href="/books">Каталог</a></h1>
         </div>
+
+        <!-- Пагинация по датам -->
+        {% if prev_date or next_date %}
         <div class="row">
-            <div class="book col-md-4">
-                <h2>Сияние</h2>
-                <p>Автор: Стивен Кинг</p>
-                <p>Дата публикации: 2018-09-10</p>
-            </div>
-            <div class="book col-md-4">
-                <h2>1984</h2>
-                <p>Автор: Джордж Оруэл</p>
-                <p>Дата публикации: 2015-03-11</p>
+            <div class="col-md-12">
+                <nav aria-label="Date navigation">
+                    <ul class="pagination">
+                        {% if prev_date %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'books_by_date' prev_date|date:'Y-m-d' %}">
+                                ← {{ prev_date|date:'Y-m-d' }}
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link">
+                                {{ pub_date|date:'Y-m-d' }}
+                            </span>
+                        </li>
+
+                        {% if next_date %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'books_by_date' next_date|date:'Y-m-d' %}">
+                                {{ next_date|date:'Y-m-d' }} →
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </div>
         </div>
+        {% endif %}
+
+        <!-- Список книг -->
+        <div class="row">
+            {% for book in books %}
+            <div class="book col-md-4">
+                <h2>{{ book.name }}</h2>
+                <p>Автор: {{ book.author }}</p>
+                <p>Дата публикации: {{ book.pub_date|date:'Y-m-d' }}</p>
+            </div>
+            {% empty %}
+            <div class="col-md-12">
+                <p>Книг не найдено</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Если мы на главной странице, показываем все даты с книгами -->
+        {% if not pub_date %}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h3>Книги по датам:</h3>
+                <ul class="list-group">
+                    {% regroup books|dictsort:"pub_date" by pub_date as date_list %}
+                    {% for date in date_list %}
+                    <li class="list-group-item">
+                        <a href="{% url 'books_by_date' date.grouper|date:'Y-m-d' %}">
+                            {{ date.grouper|date:'Y-m-d' }} ({{ date.list|length }} книг)
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

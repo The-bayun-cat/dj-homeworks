@@ -1,2 +1,2 @@
-django
-psycopg2-binary
+Django==6.0.1
+psycopg2-binary==2.9.11
